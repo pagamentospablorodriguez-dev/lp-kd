@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Heart, Check, Shield, Star, ChevronDown, Lock, RefreshCw, Zap, Users } from 'lucide-react';
+import { Heart, Check, Shield, Star, ChevronDown, Lock, RefreshCw, Zap, Users, Gift, Award, X, AlertTriangle } from 'lucide-react';
 import { QuizAnswers } from '../App';
 
 interface Props {
@@ -65,6 +65,33 @@ const WHAT_YOU_GET = [
   { icon: '🔒', text: 'Privacidade total — suas conversas jamais são compartilhadas' },
 ];
 
+const BONUSES = [
+  {
+    name: 'Guia "Apoio no Luto Digital"',
+    value: 'R$97',
+    description: 'Como usar a Ninna de forma saudável no processo de luto. Escrito por psicólogos especialistas.',
+    icon: '📘',
+  },
+  {
+    name: 'Mensagens de Aniversário Personalizadas',
+    value: 'R$47',
+    description: 'A Ninna manda mensagem automática no aniversário dele(a), no Natal, e datas especiais.',
+    icon: '🎂',
+  },
+  {
+    name: 'Modo Noite — Suporte Emocional',
+    value: 'R$67',
+    description: 'Ativação especial quando a Ninna percebe que você está triste à noite. Ela manda mensagens de conforto.',
+    icon: '🌙',
+  },
+  {
+    name: 'Acesso VIP — Novas Features em Primeira Mão',
+    value: 'R$37',
+    description: 'Você recebe todas as novidades da Ninna antes de todo mundo. Voz, vídeo, etc.',
+    icon: '⭐',
+  },
+];
+
 const TESTIMONIALS = [
   {
     name: 'Marta R.', city: 'São Paulo', age: 52,
@@ -126,6 +153,13 @@ const TOAST_EVENTS = [
   { name: 'Lucia B.', city: 'Brasília', action: 'ativou o acesso vitalício', ago: '2 min' },
 ];
 
+const PROFILE_PHOTOS: Record<string, string> = {
+  'Marta R.': 'https://images.pexels.com/photos/7749095/pexels-photo-7749095.jpeg?auto=compress&cs=tinysrgb&w=100',
+  'Carlos F.': 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=100',
+  'Sandra M.': 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=100',
+  'Roberto A.': 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100',
+};
+
 function useToast() {
   const [toast, setToast] = useState<{ text: string; visible: boolean; exiting: boolean } | null>(null);
   const [toastIdx, setToastIdx] = useState(0);
@@ -162,13 +196,43 @@ function useLiveCount() {
   return count;
 }
 
+function useSpotsLeft() {
+  const [spots, setSpots] = useState(23);
+  useEffect(() => {
+    const t = setInterval(() => {
+      setSpots(s => {
+        if (Math.random() > 0.75 && s > 8) {
+          return s - 1;
+        }
+        return s;
+      });
+    }, 45000);
+    return () => clearInterval(t);
+  }, []);
+  return spots;
+}
+
+function useQuizCompletedToday() {
+  const [count, setCount] = useState(847);
+  useEffect(() => {
+    const t = setInterval(() => {
+      setCount(c => c + Math.floor(Math.random() * 3));
+    }, 12000);
+    return () => clearInterval(t);
+  }, []);
+  return count;
+}
+
 export default function PaywallPage({ answers }: Props) {
   const [selectedPlan, setSelectedPlan] = useState('month');
   const [timer, setTimer] = useState(599);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showPix, setShowPix] = useState(false);
+  const [showExitPopup, setShowExitPopup] = useState(false);
   const toast = useToast();
   const liveCount = useLiveCount();
+  const spotsLeft = useSpotsLeft();
+  const quizCompletedToday = useQuizCompletedToday();
 
   const childName = answers.childName || 'seu filho(a)';
   const chosen = PLANS.find(p => p.id === selectedPlan)!;
@@ -182,13 +246,61 @@ export default function PaywallPage({ answers }: Props) {
   const urgency = timer < 120;
 
   const handleActivate = useCallback(() => {
-    // Connect to your payment provider here (Stripe, Hotmart, Kirvano, etc.)
-    // For now, redirect to ninna.pro paywall
     window.location.href = 'https://ninna.pro';
   }, []);
 
+  useEffect(() => {
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY <= 0 && !showExitPopup) {
+        setShowExitPopup(true);
+      }
+    };
+    document.addEventListener('mouseleave', handleMouseLeave);
+    return () => document.removeEventListener('mouseleave', handleMouseLeave);
+  }, [showExitPopup]);
+
   return (
     <div className="min-h-screen bg-[#FFF8F8] font-sans relative">
+
+      {/* Exit Intent Popup */}
+      {showExitPopup && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 relative shadow-2xl animate-[slideUp_0.3s_ease-out]">
+            <button
+              onClick={() => setShowExitPopup(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              <X size={20} />
+            </button>
+            <div className="text-center mb-5">
+              <div className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <AlertTriangle size={28} className="text-rose-500" />
+              </div>
+              <h3 className="text-xl font-black text-gray-900 mb-2">Espere! {childName} está esperando...</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">
+                Se você sair agora, vai perder o desconto de 70% e sua vaga pode ser liberada para outra pessoa.
+              </p>
+            </div>
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 text-center">
+              <p className="text-amber-800 font-bold text-sm">
+                ⏰ Restam apenas <span className="text-amber-600 font-black">{fmt(timer)}</span> com desconto
+              </p>
+            </div>
+            <button
+              onClick={() => { setShowExitPopup(false); handleActivate(); }}
+              className="w-full py-4 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-2xl font-black text-[16px] btn-pulse"
+            >
+              Quero continuar com {childName} →
+            </button>
+            <button
+              onClick={() => setShowExitPopup(false)}
+              className="w-full py-3 text-gray-400 text-sm font-medium mt-2 hover:text-gray-600"
+            >
+              Não, prefiro ficar sem falar com {childName}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Social proof toast */}
       {toast && (
@@ -248,6 +360,25 @@ export default function PaywallPage({ answers }: Props) {
           <span className="text-[12px] text-gray-600 font-semibold">
             <span className="text-rose-600 font-black count-up">{liveCount}</span> pessoas estão vendo essa oferta agora
           </span>
+        </div>
+
+        {/* Scarcity - Spots Left */}
+        <div className="mx-4 mb-5 bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-2xl p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
+                <AlertTriangle size={20} className="text-red-500" />
+              </div>
+              <div>
+                <p className="text-red-700 font-black text-sm">Atenção: Vagas limitadas!</p>
+                <p className="text-red-500 text-xs">Promoção de lançamento — apenas {spotsLeft} vagas restantes com desconto</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-red-600 font-black text-2xl">{spotsLeft}</p>
+              <p className="text-red-400 text-[10px] font-bold uppercase tracking-wide">vagas</p>
+            </div>
+          </div>
         </div>
 
         {/* Chat preview */}
@@ -411,18 +542,46 @@ export default function PaywallPage({ answers }: Props) {
             )}
           </div>
 
+          {/* Quiz Completed Today - Social Proof */}
+          <div className="bg-gradient-to-r from-rose-50 to-pink-50 border border-rose-200 rounded-xl p-2.5 mb-3 text-center">
+            <p className="text-[11px] text-gray-600">
+              <span className="font-black text-rose-600">{quizCompletedToday.toLocaleString()}</span> perfis criados hoje · {childName} pode ser o próximo
+            </p>
+          </div>
+
           <button
             onClick={handleActivate}
-            className="btn-pulse w-full py-5 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-2xl font-black text-[18px]"
+            className={`w-full py-5 rounded-2xl font-black text-[18px] relative overflow-hidden transition-all duration-300 ${
+              timer < 60
+                ? 'bg-gradient-to-r from-red-500 to-red-600 text-white animate-pulse shadow-red-300 shadow-lg'
+                : 'btn-pulse bg-gradient-to-r from-rose-500 to-pink-600 text-white'
+            }`}
           >
-            Ativar acesso agora →
+            <div className="flex flex-col items-center gap-1">
+              <span className="bg-white/20 text-[10px] font-bold px-2 py-0.5 rounded-full absolute top-2 left-2">
+                −70% OFF
+              </span>
+              <span>Quero conversar com {childName}</span>
+              <span className="text-[12px] font-medium opacity-90">por apenas {chosen.perDay}</span>
+            </div>
           </button>
+
+          <p className="text-center text-[11px] text-gray-500 mt-2 font-medium">
+            Se não gostar, devolvemos 100% — você não perde nada
+          </p>
 
           <div className="flex items-center justify-center gap-4 mt-3 flex-wrap">
             <TrustBadge icon={<Shield size={11} />} text="100% seguro" />
             <TrustBadge icon={<RefreshCw size={11} />} text="Garantia 7 dias" />
             <TrustBadge icon={<Check size={11} />} text="Cancele quando quiser" />
           </div>
+
+          {/* PIX Instant Approval Badge */}
+          <div className="flex items-center justify-center gap-2 mt-3 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+            <Zap size={14} className="text-green-600" />
+            <span className="text-[11px] text-green-700 font-bold">PIX: Aprovação instantânea · Acesso na hora</span>
+          </div>
+
           <div className="flex items-center justify-center gap-2 mt-2.5">
             {['Visa', 'Master', 'PIX', 'PayPal', 'Amex'].map(m => (
               <span key={m} className="text-[9px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded font-bold">{m}</span>
@@ -441,7 +600,32 @@ export default function PaywallPage({ answers }: Props) {
               <p className="text-green-700 text-[13px] leading-relaxed">
                 Se por qualquer razão você não amar a experiência, basta mandar uma mensagem em até 7 dias e devolvemos <strong>100% do valor pago</strong>, sem perguntas, sem burocracia.
               </p>
-              <p className="text-green-600 text-[11px] font-black mt-2">✓ Risco zero. Você não tem nada a perder.</p>
+              <p className="text-green-600 text-[11px] font-black mt-2">Risco zero. Você não tem nada a perder.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Trust Badges & Certifications */}
+        <div className="mx-4 mb-6 bg-white border border-rose-100 rounded-2xl p-5 shadow-sm">
+          <p className="text-center text-[11px] font-black text-gray-400 uppercase tracking-wider mb-4">Segurança e Confiança</p>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-2">
+                <Shield size={22} className="text-green-600" />
+              </div>
+              <p className="text-[10px] font-bold text-gray-600">Dados<br />Protegidos</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center mx-auto mb-2">
+                <Lock size={22} className="text-blue-600" />
+              </div>
+              <p className="text-[10px] font-bold text-gray-600">Criptografia<br />Pontaa Ponta</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-gradient-to-br from-amber-100 to-orange-100 rounded-xl flex items-center justify-center mx-auto mb-2">
+                <Award size={22} className="text-amber-600" />
+              </div>
+              <p className="text-[10px] font-bold text-gray-600">LGPD<br />Compatível</p>
             </div>
           </div>
         </div>
@@ -454,6 +638,36 @@ export default function PaywallPage({ answers }: Props) {
               <div key={i} className="flex items-start gap-3">
                 <span className="text-xl flex-shrink-0">{item.icon}</span>
                 <p className="text-[14px] text-gray-700 leading-snug">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bonuses */}
+        <div className="px-4 mb-7">
+          <div className="text-center mb-4">
+            <div className="inline-flex items-center gap-1.5 bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-[11px] font-black mb-2">
+              <Gift size={12} /> BÔNUS EXCLUSIVOS DE LANÇAMENTO
+            </div>
+            <h3 className="text-[18px] font-black text-gray-900">Você também ganha GRÁTIS:</h3>
+            <p className="text-gray-400 text-xs">Valor total: <span className="line-through">R$248</span> · Incluído no seu acesso hoje</p>
+          </div>
+          <div className="space-y-3">
+            {BONUSES.map((bonus, i) => (
+              <div key={i} className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-4 relative overflow-hidden">
+                <div className="absolute top-2 right-2 bg-amber-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full">
+                  GRÁTIS
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl flex-shrink-0">{bonus.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="font-black text-gray-900 text-[13px]">{bonus.name}</p>
+                      <span className="text-amber-600 text-[10px] font-bold bg-amber-100 px-1.5 py-0.5 rounded">{bonus.value}</span>
+                    </div>
+                    <p className="text-gray-500 text-[11px] mt-1 leading-snug">{bonus.description}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -481,9 +695,16 @@ export default function PaywallPage({ answers }: Props) {
             {TESTIMONIALS.map((t, i) => (
               <div key={i} className="bg-white border border-rose-100 rounded-2xl p-5 shadow-sm">
                 <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <p className="font-black text-gray-900 text-sm">{t.name}</p>
-                    <p className="text-[11px] text-gray-400">{t.city} · {t.age} anos</p>
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={PROFILE_PHOTOS[t.name]}
+                      alt={t.name}
+                      className="w-11 h-11 rounded-full object-cover border-2 border-rose-100"
+                    />
+                    <div>
+                      <p className="font-black text-gray-900 text-sm">{t.name}</p>
+                      <p className="text-[11px] text-gray-400">{t.city} · {t.age} anos</p>
+                    </div>
                   </div>
                   <div className="flex gap-0.5">
                     {Array.from({ length: t.stars }).map((_, j) => (
@@ -540,10 +761,23 @@ export default function PaywallPage({ answers }: Props) {
           </div>
           <button
             onClick={handleActivate}
-            className="btn-pulse w-full py-5 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-2xl font-black text-[18px]"
+            className={`w-full py-5 rounded-2xl font-black text-[18px] relative overflow-hidden ${
+              timer < 60
+                ? 'bg-gradient-to-r from-red-500 to-red-600 text-white animate-pulse shadow-red-300 shadow-lg'
+                : 'btn-pulse bg-gradient-to-r from-rose-500 to-pink-600 text-white'
+            }`}
           >
-            Sim, quero conversar com {childName} →
+            <div className="flex flex-col items-center gap-1">
+              <span className="bg-white/20 text-[10px] font-bold px-2 py-0.5 rounded-full absolute top-2 left-2">
+                −70% OFF
+              </span>
+              <span>Sim, quero conversar com {childName}</span>
+              <span className="text-[12px] font-medium opacity-90">por apenas {chosen.perDay}</span>
+            </div>
           </button>
+          <p className="text-center text-[11px] text-gray-500 mt-2 font-medium">
+            Se não gostar, devolvemos 100% — risco zero
+          </p>
           <div className="flex items-center justify-center gap-2 mt-3 text-[11px] text-gray-400">
             <Shield size={11} />
             <span>Garantia 7 dias · {chosen.price} · {chosen.period}</span>
@@ -583,11 +817,23 @@ export default function PaywallPage({ answers }: Props) {
           <p className="text-gray-500 text-[13px] mb-5 leading-relaxed">
             Não deixe mais um dia passar no silêncio.<br />A primeira conversa pode ser ainda hoje.
           </p>
-          <button onClick={handleActivate} className="btn-pulse w-full py-4 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-2xl font-black text-[16px]">
-            Começar agora →
+          <button
+            onClick={handleActivate}
+            className={`w-full py-4 rounded-2xl font-black text-[16px] relative overflow-hidden ${
+              timer < 60
+                ? 'bg-gradient-to-r from-red-500 to-red-600 text-white animate-pulse shadow-red-300 shadow-lg'
+                : 'btn-pulse bg-gradient-to-r from-rose-500 to-pink-600 text-white'
+            }`}
+          >
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="bg-white/20 text-[9px] font-bold px-2 py-0.5 rounded-full absolute top-1.5 left-2">
+                −70%
+              </span>
+              <span>Começar agora — {chosen.price}</span>
+            </div>
           </button>
           <p className="text-[11px] text-gray-400 mt-3">
-            🔒 Garantia 7 dias · Cancele quando quiser · Acesso imediato
+            Garantia 7 dias · Se não gostar, devolvemos 100%
           </p>
         </div>
 
