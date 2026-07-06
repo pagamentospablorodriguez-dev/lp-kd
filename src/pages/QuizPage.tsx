@@ -42,7 +42,7 @@ const STEPS: Step[] = [
   {
     id: 'role',
     type: 'single',
-    progress: 4,
+    progress: 10,
     title: 'Você é mãe ou pai?',
     subtitle: 'Queremos entender a sua jornada',
     field: 'role',
