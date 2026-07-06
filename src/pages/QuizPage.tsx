@@ -762,7 +762,7 @@ function Splash({ onDone }: { onDone: () => void }) {
     const iv = setInterval(() => {
       p += 2.2;
       setProgress(Math.min(p, 100));
-      if (p >= 100) { clearInterval(iv); setTimeout(onDone, 2500); }
+      if (p >= 100) { clearInterval(iv); setTimeout(onDone, 20500); }
     }, 28);
     return () => clearInterval(iv);
   }, []);
