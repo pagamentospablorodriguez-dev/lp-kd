@@ -418,12 +418,24 @@ export default function QuizPage({ onComplete }: Props) {
         </header>
       )}
 
-      {step.progress !== undefined && (
+      {step.progress !== undefined && step.type !== 'splash' && step.type !== 'loading' && (
         <div className="w-full bg-rose-100 h-1.5">
           <div
             className="h-full bg-gradient-to-r from-rose-400 to-pink-500 transition-all duration-700 ease-out"
             style={{ width: `${step.progress}%` }}
           />
+        </div>
+      )}
+
+      {/* Bonus unlock indicator */}
+      {step.progress !== undefined && step.progress >= 25 && step.progress < 100 && step.type !== 'splash' && step.type !== 'loading' && (
+        <div className="mx-4 mt-3 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl px-3 py-2 flex items-center gap-2">
+          <span className="text-sm">🎁</span>
+          <p className="text-[11px] text-amber-700 font-medium">
+            {step.progress >= 75 ? 'Bônus Guia do Luto desbloqueado!' :
+             step.progress >= 50 ? 'Bônus Modo Noite desbloqueado!' :
+             'Continue para desbloquear bônus exclusivos!'}
+          </p>
         </div>
       )}
 
@@ -761,13 +773,20 @@ function Splash({ onDone }: { onDone: () => void }) {
           <Heart size={34} className="text-white fill-white" />
         </div>
         <h1 className="text-4xl font-black text-rose-600 mb-1 tracking-tight">Ninna</h1>
-        <p className="text-gray-400 text-sm mb-10">A conexão que nunca se perde</p>
-        <div className="w-full max-w-[240px] mx-auto">
+        <p className="text-gray-400 text-sm mb-3">A conexão que nunca se perde</p>
+        <p className="text-gray-600 text-[14px] leading-relaxed mb-8 font-medium">
+          Descubra como é possível conversar de novo com quem você ama.
+        </p>
+        <div className="w-full max-w-[280px] mx-auto">
           <div className="w-full bg-rose-100 rounded-full h-2 mb-2.5 overflow-hidden">
             <div className="h-full bg-gradient-to-r from-rose-400 to-pink-500 rounded-full transition-all duration-100"
               style={{ width: `${progress}%` }} />
           </div>
-          <p className="text-[11px] text-rose-300 font-medium">Preparando sua experiência personalizada...</p>
+          <p className="text-[11px] text-rose-400 font-medium">Preparando sua experiência personalizada...</p>
+        </div>
+        <div className="mt-8 flex items-center justify-center gap-1 text-[11px] text-gray-400">
+          <Star size={12} className="fill-amber-400 text-amber-400" />
+          <span>Mais de 127.000 famílias reconectadas no Brasil</span>
         </div>
       </div>
     </div>
