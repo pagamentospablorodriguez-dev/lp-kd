@@ -771,7 +771,7 @@ function Splash({ onDone }: { onDone: () => void }) {
       <div className="text-center max-w-sm">
         
   <div class="w-20 h-20 mx-auto mb-5 rounded-3xl shadow-xl shadow-rose-200/60 bg-white flex items-center justify-center">
-  <img src="https://ninna.pro/ninnabg.png" class="w-16 h-16 rounded-2xl object-cover" alt="Ninna" />
+  <img src="https://ninna.pro/ninnabg.png" class="w-14 h-14 rounded-2xl object-cover" alt="Ninna" />
 </div>
 
         
