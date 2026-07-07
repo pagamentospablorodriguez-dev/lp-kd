@@ -21,7 +21,7 @@ const PLANS = [
     afterNote: 'Renova toda semana por apenas R$9,90. Cancele quando quiser, sem complicação.',
     highlight: false,
     savings: null,
-    checkoutUrl: 'https://buy.stripe.com/9B67sL3V7czM2oH3o3b7y08',   // ← URL do plano semanal
+    checkoutUrl: 'https://pay.cakto.com.br/3fh2gs7',   // ← URL do plano semanal
   },
   {
     id: 'month',
