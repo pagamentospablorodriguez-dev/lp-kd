@@ -775,7 +775,7 @@ function Splash({ onDone }: { onDone: () => void }) {
       const idx = Math.min(Math.floor(p / 22), SPLASH_MESSAGES.length - 1);
       setMsgIndex(idx);
       if (p >= 100) { clearInterval(iv); setTimeout(onDone, 400); }
-    }, 100);
+    }, 90);
     return () => clearInterval(iv);
   }, []);
 
