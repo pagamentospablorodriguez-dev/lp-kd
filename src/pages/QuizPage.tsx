@@ -416,7 +416,7 @@ export default function QuizPage({ onComplete }: Props) {
               </button>
             )}
             <div className="flex items-center gap-1.5">
-              <Heart size={17} className="text-rose-500 fill-rose-500" />
+              <img src="https://ninna.pro/ninnabg.png" width="17" height="17" />
               <span className="font-black text-rose-600 text-sm tracking-tight">Ninna</span>
             </div>
           </div>
