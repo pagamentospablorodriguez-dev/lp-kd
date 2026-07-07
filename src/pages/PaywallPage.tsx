@@ -37,7 +37,7 @@ const PLANS = [
     afterNote: 'Renova mensalmente. Cancele quando quiser.',
     highlight: true,
     savings: 'Você economiza R$90,00',
-    checkoutUrl: 'https://ninna.pro/checkout/semanal',   // ← URL do plano semanal
+    checkoutUrl: 'https://pay.cakto.com.br/tber8k9',   // ← URL do plano semanal
   },
   {
     id: 'lifetime',
