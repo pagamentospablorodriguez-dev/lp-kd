@@ -770,7 +770,7 @@ function Splash({ onDone }: { onDone: () => void }) {
 
   useEffect(() => {
   let p = 0;
-  const targetTime = 9000; // 9 segundos
+  const targetTime = 8000; // 9 segundos
   const interval = setInterval(() => {
     p += 100 / (targetTime / 50);   // cálculo exato
 
