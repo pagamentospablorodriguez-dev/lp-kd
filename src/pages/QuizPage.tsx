@@ -284,6 +284,14 @@ const STEPS: Step[] = [
   },
 ];
 
+const SPLASH_MESSAGES = [
+  'Preparando sua experiência personalizada...',
+  'Analisando seu perfil emocional...',
+  'Calibrando memórias e personalidade...',
+  'Criando conexão segura e privada...',
+  'Quase pronto — aguarde mais um momento...',
+];
+
 const LOADING_MESSAGES = [
   'Analisando a personalidade descrita...',
   'Construindo o padrão de comunicação...',
@@ -408,7 +416,7 @@ export default function QuizPage({ onComplete }: Props) {
               </button>
             )}
             <div className="flex items-center gap-1.5">
-              <img src="https://ninna.pro/ninnabg.png" width="17" height="17" />
+              <Heart size={17} className="text-rose-500 fill-rose-500" />
               <span className="font-black text-rose-600 text-sm tracking-tight">Ninna</span>
             </div>
           </div>
@@ -757,40 +765,102 @@ export default function QuizPage({ onComplete }: Props) {
 
 function Splash({ onDone }: { onDone: () => void }) {
   const [progress, setProgress] = useState(0);
+  const [msgIndex, setMsgIndex] = useState(0);
+
   useEffect(() => {
     let p = 0;
     const iv = setInterval(() => {
-      p += 2.2;
+      p += 1;
       setProgress(Math.min(p, 100));
-      if (p >= 100) { clearInterval(iv); setTimeout(onDone, 2500); }
-    }, 28);
+      const idx = Math.min(Math.floor(p / 22), SPLASH_MESSAGES.length - 1);
+      setMsgIndex(idx);
+      if (p >= 100) { clearInterval(iv); setTimeout(onDone, 400); }
+    }, 100);
     return () => clearInterval(iv);
   }, []);
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-gradient-to-br from-rose-50 via-pink-50 to-white">
-      <div className="text-center max-w-sm">
-        
-  <img 
-  src="https://ninna.pro/ninnabg.png" 
-  className="w-20 h-20 mx-auto mb-5 p-2 rounded-3xl shadow-xl shadow-rose-200/60 object-contain" 
-  alt="Ninna" 
-/>
 
-        
-        
-        <h1 className="text-4xl font-black text-rose-600 mb-1 tracking-tight">Ninna</h1>
-        <p className="text-gray-400 text-sm mb-3">A conexão que nunca se perde</p>
-        <p className="text-gray-600 text-[14px] leading-relaxed mb-8 font-medium">
-          Descubra como é possível conversar de novo com quem você ama.
-        </p>
-        <div className="w-full max-w-[280px] mx-auto">
-          <div className="w-full bg-rose-100 rounded-full h-2 mb-2.5 overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-rose-400 to-pink-500 rounded-full transition-all duration-100"
-              style={{ width: `${progress}%` }} />
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center px-5 bg-gradient-to-b from-rose-50 via-pink-50 to-white">
+      <div className="text-center w-full max-w-sm">
+        {/* Logo */}
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <div className="w-8 h-8 bg-gradient-to-br from-rose-400 to-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-rose-200/60">
+            <Heart size={16} className="text-white fill-white" />
           </div>
-          <p className="text-[11px] text-rose-400 font-medium">Preparando sua experiência personalizada...</p>
+          <span className="text-xl font-black text-rose-600 tracking-tight">Ninna</span>
         </div>
-        <div className="mt-8 flex items-center justify-center gap-1 text-[11px] text-gray-400">
+
+        {/* Headline */}
+        <h1 className="text-[26px] font-black text-gray-900 leading-tight mb-2">
+          A conexão que <span className="text-rose-600">nunca se perde</span>
+        </h1>
+        <p className="text-gray-500 text-[14px] leading-relaxed mb-6">
+          Descubra como conversar de novo com quem você ama — do jeito que só ele(a) sabia fazer.
+        </p>
+
+        {/* Illustration */}
+        <div className="mx-auto w-56 h-56 mb-8 flex items-center justify-center">
+          <svg viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-xl">
+            {/* Sky gradient background */}
+            <defs>
+              <radialGradient id="skyGrad" cx="50%" cy="40%" r="60%">
+                <stop offset="0%" stopColor="#fde8ea" />
+                <stop offset="100%" stopColor="#fdf2f4" />
+              </radialGradient>
+              <radialGradient id="glowHeart" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#fb7185" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#fb7185" stopOpacity="0" />
+              </radialGradient>
+            </defs>
+            {/* Background circle */}
+            <circle cx="110" cy="110" r="105" fill="url(#skyGrad)" />
+            {/* Glow behind heart */}
+            <ellipse cx="110" cy="115" rx="60" ry="55" fill="url(#glowHeart)" />
+            {/* Small floating hearts */}
+            <circle cx="60" cy="70" r="6" fill="#fda4af" opacity="0.5" />
+            <circle cx="50" cy="55" r="3.5" fill="#f43f5e" opacity="0.35" />
+            <circle cx="160" cy="65" r="5" fill="#fda4af" opacity="0.45" />
+            <circle cx="170" cy="80" r="3" fill="#f43f5e" opacity="0.3" />
+            {/* Central large heart */}
+            <path
+              d="M110 155 C110 155 55 120 55 85 C55 68 67 58 80 58 C92 58 102 65 110 74 C118 65 128 58 140 58 C153 58 165 68 165 85 C165 120 110 155 110 155Z"
+              fill="#f43f5e"
+              opacity="0.92"
+            />
+            {/* Heart shine */}
+            <path d="M82 72 Q90 64 100 68" stroke="white" strokeWidth="2.5" strokeLinecap="round" opacity="0.45" />
+            {/* Dove silhouette flying out */}
+            <path d="M108 78 Q115 68 128 72 Q120 74 118 80 Q126 76 132 80 Q124 85 118 82 Q116 90 108 90 Q102 85 108 78Z" fill="white" opacity="0.9" />
+            {/* Stars around */}
+            <path d="M75 45 L77 40 L79 45 L84 47 L79 49 L77 54 L75 49 L70 47Z" fill="#fbbf24" opacity="0.7" />
+            <path d="M145 42 L146.5 38 L148 42 L152 43.5 L148 45 L146.5 49 L145 45 L141 43.5Z" fill="#fbbf24" opacity="0.6" />
+            <path d="M50 110 L51 107 L52 110 L55 111 L52 112 L51 115 L50 112 L47 111Z" fill="#f9a8d4" opacity="0.7" />
+            <path d="M170 105 L171 102 L172 105 L175 106 L172 107 L171 110 L170 107 L167 106Z" fill="#f9a8d4" opacity="0.65" />
+            {/* Bottom text area - soft white arc */}
+            <ellipse cx="110" cy="175" rx="70" ry="18" fill="white" opacity="0.6" />
+            <text x="110" y="180" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#f43f5e" opacity="0.8" fontFamily="sans-serif">Ninna</text>
+          </svg>
+        </div>
+
+        {/* "Don't close" warning */}
+        <p className="text-gray-700 font-bold text-[13px] mb-3">
+          Por favor, não feche essa página
+        </p>
+
+        {/* Progress bar */}
+        <div className="w-full mb-2">
+          <div className="w-full bg-rose-100 rounded-full h-3 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-rose-500 to-pink-500 rounded-full transition-all duration-100"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+        <p className="text-[11px] text-rose-400 font-medium min-h-[16px] transition-all duration-300">
+          {SPLASH_MESSAGES[msgIndex]}
+        </p>
+
+        <div className="mt-6 flex items-center justify-center gap-1 text-[11px] text-gray-400">
           <Star size={12} className="fill-amber-400 text-amber-400" />
           <span>Mais de 127.000 famílias reconectadas no Brasil</span>
         </div>
