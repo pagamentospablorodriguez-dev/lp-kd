@@ -325,7 +325,7 @@ export default function QuizPage({ onComplete }: Props) {
     if (step.type === 'loading') {
       let progress = 0;
       const interval = setInterval(() => {
-        progress += Math.random() * 2.5 + 0.5;
+        progress += Math.random() * 1.6 + 0.5;
         if (progress >= 100) progress = 100;
         setLoadingProgress(Math.min(progress, 100));
         const idx = Math.min(
@@ -337,7 +337,7 @@ export default function QuizPage({ onComplete }: Props) {
           clearInterval(interval);
           setTimeout(advance, 900);
         }
-      }, 90);
+      }, 130);
       return () => clearInterval(interval);
     }
   }, [stepIndex]);
@@ -770,7 +770,7 @@ function Splash({ onDone }: { onDone: () => void }) {
   useEffect(() => {
     let p = 0;
     const iv = setInterval(() => {
-      p += 1;
+      p += 2;
       setProgress(Math.min(p, 100));
       const idx = Math.min(Math.floor(p / 22), SPLASH_MESSAGES.length - 1);
       setMsgIndex(idx);
