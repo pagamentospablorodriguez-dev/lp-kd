@@ -339,7 +339,7 @@ export default function PaywallPage({ answers }: Props) {
       {/* Sticky header */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-rose-100 px-4 py-2.5 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-1.5">
-          <Heart size={17} className="text-rose-500 fill-rose-500" />
+          <img src="https://ninna.pro/ninnabg.png" width="17" height="17" />
           <span className="font-black text-rose-600 text-sm tracking-tight">Ninna</span>
         </div>
         <div className={`text-[11px] font-black px-2.5 py-1 rounded-full border tabular-nums transition-colors ${
