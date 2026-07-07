@@ -767,17 +767,45 @@ function Splash({ onDone }: { onDone: () => void }) {
   const [progress, setProgress] = useState(0);
   const [msgIndex, setMsgIndex] = useState(0);
 
+
+  
   useEffect(() => {
-    let p = 0;
-    const iv = setInterval(() => {
-      p += 1;
-      setProgress(Math.min(p, 100));
-      const idx = Math.min(Math.floor(p / 22), SPLASH_MESSAGES.length - 1);
-      setMsgIndex(idx);
-      if (p >= 100) { clearInterval(iv); setTimeout(onDone, 400); }
-    }, 90);
-    return () => clearInterval(iv);
-  }, []);
+  let p = 0;
+  const duration = 9000;        // ← 9 segundos (mude aqui se quiser)
+  const intervalTime = 50;      // intervalo menor = mais suave
+  const steps = duration / intervalTime;
+  const increment = 100 / steps;
+
+  const iv = setInterval(() => {
+    p += increment;
+    
+    if (p >= 100) {
+      p = 100;
+      clearInterval(iv);
+      setProgress(100);
+      
+      // Mensagem final
+      setMsgIndex(SPLASH_MESSAGES.length - 1);
+      
+      // Avança depois de 400ms
+      setTimeout(onDone, 400);
+      return;
+    }
+
+    setProgress(Math.min(p, 100));
+    
+    const idx = Math.min(
+      Math.floor(p / 22), 
+      SPLASH_MESSAGES.length - 1
+    );
+    setMsgIndex(idx);
+  }, intervalTime);
+
+  return () => clearInterval(iv);
+}, [onDone]);
+
+
+  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-5 bg-gradient-to-b from-rose-50 via-pink-50 to-white">
