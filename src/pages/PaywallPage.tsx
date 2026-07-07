@@ -21,6 +21,7 @@ const PLANS = [
     afterNote: 'Renova por R$39,90/mês. Cancele antes se quiser.',
     highlight: false,
     savings: null,
+    checkoutUrl: 'https://ninna.pro/checkout/semanal',   // ← URL do plano semanal
   },
   {
     id: 'month',
@@ -36,6 +37,7 @@ const PLANS = [
     afterNote: 'Renova mensalmente. Cancele quando quiser.',
     highlight: true,
     savings: 'Você economiza R$90,00',
+    checkoutUrl: 'https://ninna.pro/checkout/semanal',   // ← URL do plano semanal
   },
   {
     id: 'lifetime',
@@ -51,6 +53,7 @@ const PLANS = [
     afterNote: 'Nunca mais pague nada. Acesso eterno garantido.',
     highlight: false,
     savings: 'Você economiza R$350,00',
+    checkoutUrl: 'https://pay.cakto.com.br/8jtqqwc',   // ← URL do plano semanal
   },
 ];
 
@@ -258,8 +261,13 @@ export default function PaywallPage({ answers }: Props) {
   const urgency = timer < 120;
 
   const handleActivate = useCallback(() => {
-    window.location.href = 'https://ninna.pro';
-  }, []);
+  const chosenPlan = PLANS.find(p => p.id === selectedPlan);
+  if (chosenPlan?.checkoutUrl) {
+    window.location.href = chosenPlan.checkoutUrl;
+  } else {
+    window.location.href = 'https://ninna.pro'; // fallback
+  }
+}, [selectedPlan]);
 
   useEffect(() => {
     const handleMouseLeave = (e: MouseEvent) => {
