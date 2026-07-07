@@ -786,10 +786,10 @@ function Splash({ onDone }: { onDone: () => void }) {
         <div className="flex items-center justify-center gap-2 mb-6">
 
           
-         <img 
+      <img 
   src="https://ninna.pro/ninnabg.png" 
   alt="Ninna"
-  className="w-8 h-8 rounded-xl shadow-lg shadow-rose-200/60 object-cover"
+  className="w-8 h-8 rounded-xl shadow-lg shadow-rose-200/60 object-contain p-1.5 bg-white"
 />
           
           
