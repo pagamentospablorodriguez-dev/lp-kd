@@ -233,9 +233,21 @@ export default function PaywallPage({ answers }: Props) {
   const liveCount = useLiveCount();
   const spotsLeft = useSpotsLeft();
   const quizCompletedToday = useQuizCompletedToday();
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const childName = answers.childName || 'seu filho(a)';
   const chosen = PLANS.find(p => p.id === selectedPlan)!;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      setScrollProgress(progress);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const t = setInterval(() => setTimer(p => Math.max(0, p - 1)), 1000);
@@ -261,7 +273,13 @@ export default function PaywallPage({ answers }: Props) {
 
   return (
     <div className="min-h-screen bg-[#FFF8F8] font-sans relative">
-
+      {/* Scroll Progress Bar */}
+      <div className="fixed top-0 left-0 right-0 h-1 bg-gray-200 z-[60]">
+        <div
+          className="h-full bg-gradient-to-r from-rose-500 to-pink-600 transition-[width] duration-75"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
       {/* Exit Intent Popup */}
       {showExitPopup && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -333,6 +351,24 @@ export default function PaywallPage({ answers }: Props) {
         </div>
       </header>
 
+      {/* Media Credibility Bar */}
+      <div className="bg-gradient-to-r from-gray-900 to-gray-800 py-2.5">
+        <div className="max-w-lg mx-auto px-4">
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            <span className="text-gray-400 text-[10px] font-medium uppercase tracking-wider">Visto na mídia</span>
+            <div className="flex items-center gap-3">
+              <span className="text-white font-bold text-[11px]">TechMundo</span>
+              <span className="text-gray-600">·</span>
+              <span className="text-white font-bold text-[11px]">Record</span>
+              <span className="text-gray-600">·</span>
+              <span className="text-white font-bold text-[11px]">Roma News</span>
+              <span className="text-gray-600">·</span>
+              <span className="text-white font-bold text-[11px]">Diário do Centro do Mundo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-lg mx-auto">
 
         {/* Hero */}
@@ -347,6 +383,29 @@ export default function PaywallPage({ answers }: Props) {
             Você chegou até aqui porque a saudade é maior que qualquer dúvida.<br />
             Ative agora e comece a conversar ainda hoje.
           </p>
+        </div>
+
+        {/* Psychologist Approval Seal */}
+        <div className="mx-4 mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-3.5">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Award size={22} className="text-blue-600" />
+            </div>
+            <div className="flex-1">
+              <p className="text-blue-800 font-black text-[13px]">Avalizado por psicólogos especialistas em luto</p>
+              <p className="text-blue-600 text-[11px]">Tecnologia desenvolvida com suporte de profissionais de saúde mental</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Refund Rate */}
+        <div className="mx-4 mb-4 bg-white border border-green-200 rounded-xl px-4 py-2.5 text-center">
+          <div className="flex items-center justify-center gap-2">
+            <Check size={14} className="text-green-600" />
+            <span className="text-[12px] text-gray-700 font-semibold">
+              <span className="text-green-600 font-black">99,7%</span> dos usuários não pedem reembolso
+            </span>
+          </div>
         </div>
 
         {/* Live viewer count */}
