@@ -768,40 +768,30 @@ function Splash({ onDone }: { onDone: () => void }) {
   const [msgIndex, setMsgIndex] = useState(0);
 
 
-  
-useEffect(() => {
-  let p = 0;
-  let interval: NodeJS.Timeout;
+  useEffect(() => {
+  let progress = 0;
+  const totalTime = 9000; // 9 segundos
+  const intervalMs = 50;
 
-  const duration = 9000;        // ← Tempo total desejado em milissegundos (9 segundos)
-  const intervalTime = 40;      // quanto menor, mais suave
-  const increment = 100 / (duration / intervalTime);
+  const interval = setInterval(() => {
+    progress += (100 * intervalMs) / totalTime;
 
-  interval = setInterval(() => {
-    p += increment;
-    
-    if (p >= 100) {
-      p = 100;
-      setProgress(100);
-      setMsgIndex(SPLASH_MESSAGES.length - 1);
-      
-      clearInterval(interval);
-      setTimeout(onDone, 400);
-      return;
-    }
+    setProgress(Math.min(Math.floor(progress), 100));
 
-    setProgress(Math.min(Math.floor(p), 100));
-
-    const idx = Math.min(
-      Math.floor(p / 22),
+    const msgIndex = Math.min(
+      Math.floor(progress / 22),
       SPLASH_MESSAGES.length - 1
     );
-    setMsgIndex(idx);
-  }, intervalTime);
+    setMsgIndex(msgIndex);
+
+    if (progress >= 100) {
+      clearInterval(interval);
+      setTimeout(onDone, 400);
+    }
+  }, intervalMs);
 
   return () => clearInterval(interval);
-}, []);   // ← Array vazio é importante
-
+}, []);
   
 
   return (
