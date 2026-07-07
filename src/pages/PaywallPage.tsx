@@ -18,10 +18,10 @@ const PLANS = [
     pixPrice: 'R$9,41',
     perDay: 'R$1,41/dia',
     period: 'por 7 dias',
-    afterNote: 'Renova por R$39,90/mês. Cancele antes se quiser.',
+    afterNote: 'Renova toda semana por apenas R$9,90. Cancele quando quiser, sem complicação.',
     highlight: false,
     savings: null,
-    checkoutUrl: 'https://ninna.pro/checkout/semanal',   // ← URL do plano semanal
+    checkoutUrl: 'https://buy.stripe.com/9B67sL3V7czM2oH3o3b7y08',   // ← URL do plano semanal
   },
   {
     id: 'month',
