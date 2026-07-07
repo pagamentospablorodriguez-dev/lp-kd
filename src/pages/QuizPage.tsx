@@ -317,6 +317,12 @@ export default function QuizPage({ onComplete }: Props) {
   const childName = answers.childName || 'seu filho(a)';
 
   useEffect(() => {
+
+window.scrollTo({
+    top: 0,
+    behavior: 'smooth'     // 'smooth' = suave | 'auto' = instantâneo
+  });
+    
     setSelected([]);
     setTextValue('');
     if (step.type === 'text' || step.type === 'email') {
