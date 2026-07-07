@@ -392,7 +392,7 @@ export default function PaywallPage({ answers }: Props) {
               <Award size={22} className="text-blue-600" />
             </div>
             <div className="flex-1">
-              <p className="text-blue-800 font-black text-[13px]">Avalizado por psicólogos especialistas em luto</p>
+              <p className="text-blue-800 font-black text-[13px]">Avaliado por psicólogos especialistas em luto</p>
               <p className="text-blue-600 text-[11px]">Tecnologia desenvolvida com suporte de profissionais de saúde mental</p>
             </div>
           </div>
