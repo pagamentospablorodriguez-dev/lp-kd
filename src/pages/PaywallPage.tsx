@@ -22,7 +22,7 @@ const PLANS = [
     afterNote: 'Renova toda semana por apenas R$9,90. Cancele quando quiser, sem complicação.',
     highlight: false,
     savings: null,
-    checkoutUrl: 'https://pay.cakto.com.br/3fh2gs7',   // ← URL do plano semanal
+    checkoutUrl: 'https://pay.cakto.com.br/bz2zbha',   // ← URL do plano semanal
   },
   {
     id: 'month',
@@ -38,7 +38,7 @@ const PLANS = [
     afterNote: 'Renova mensalmente. Cancele quando quiser.',
     highlight: true,
     savings: 'Você economiza R$90,00',
-    checkoutUrl: 'https://pay.cakto.com.br/tber8k9',   // ← URL do plano semanal
+    checkoutUrl: 'https://pay.cakto.com.br/qfekod8_970705',   // ← URL do plano semanal
   },
   {
     id: 'lifetime',
