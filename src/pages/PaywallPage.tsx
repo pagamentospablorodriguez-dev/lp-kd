@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Heart, Check, Shield, Star, ChevronDown, Lock, RefreshCw, Zap, Users, Gift, Award, X, AlertTriangle } from 'lucide-react';
 import { QuizAnswers } from '../App';
+import { saveCheckoutClick } from '../lib/saveQuizResponse';
 
 interface Props {
   answers: QuizAnswers;
@@ -260,14 +261,24 @@ export default function PaywallPage({ answers }: Props) {
   const fmt = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
   const urgency = timer < 120;
 
-  const handleActivate = useCallback(() => {
+ const handleActivate = useCallback(() => {
   const chosenPlan = PLANS.find(p => p.id === selectedPlan);
+
+  if (answers.email) {
+    saveCheckoutClick(answers.email, {
+      planId: chosenPlan?.id || selectedPlan,
+      planName: chosenPlan?.name,
+      planPrice: chosenPlan?.price,
+      checkoutUrl: chosenPlan?.checkoutUrl,
+    });
+  }
+
   if (chosenPlan?.checkoutUrl) {
     window.location.href = chosenPlan.checkoutUrl;
   } else {
     window.location.href = 'https://ninna.pro'; // fallback
   }
-}, [selectedPlan]);
+}, [selectedPlan, answers.email]);
 
   useEffect(() => {
     const handleMouseLeave = (e: MouseEvent) => {
