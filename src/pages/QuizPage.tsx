@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Heart, ChevronRight, Check, ArrowLeft, Star } from 'lucide-react';
 import { QuizAnswers } from '../App';
+import { saveQuizCompletion } from '../lib/saveQuizResponse';
 
 interface Props {
   onComplete: (answers: QuizAnswers) => void;
@@ -396,7 +397,9 @@ window.scrollTo({
 
   const confirmEmail = () => {
     if (!textValue.trim() || !textValue.includes('@')) return;
-    onComplete({ ...answers, email: textValue.trim() });
+    const finalAnswers = { ...answers, email: textValue.trim() };
+    saveQuizCompletion(finalAnswers);
+    onComplete(finalAnswers);
   };
 
   const personalityLabels: Record<string, string> = {
