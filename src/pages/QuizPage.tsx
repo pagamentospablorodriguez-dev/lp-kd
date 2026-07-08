@@ -108,6 +108,18 @@ const STEPS: Step[] = [
     ctaText: 'Continuar',
   },
   {
+    id: 'childGender',
+    type: 'single',
+    progress: 31,
+    title: 'Era menino ou menina?',
+    subtitle: 'Isso ajuda a Ninna a falar com o gênero correto',
+    field: 'childGender',
+    options: [
+      { value: 'male', label: 'Menino', emoji: '💙' },
+      { value: 'female', label: 'Menina', emoji: '💗' },
+    ],
+  },
+  {
     id: 'whatMiss',
     type: 'multi',
     progress: 34,
@@ -462,7 +474,10 @@ window.scrollTo({
 
         {step.type === 'single' && (
           <div className="max-w-lg mx-auto px-4 py-8">
-            <Header title={step.title!} subtitle={step.subtitle} />
+            <Header
+              title={step.id === 'childGender' ? `${answers.childName || 'Ele(a)'} era menino ou menina?` : step.title!}
+              subtitle={step.subtitle}
+            />
             <div className="space-y-2.5 mt-7">
               {step.options?.map(opt => (
                 <button
@@ -815,48 +830,48 @@ function Splash({ onDone }: { onDone: () => void }) {
 
         
       {/* Illustration */}
-        <div className="mx-auto w-56 h-56 mb-8 flex items-center justify-center">
-          <svg viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-xl">
-            {/* Sky gradient background */}
-            <defs>
-              <radialGradient id="skyGrad" cx="50%" cy="40%" r="60%">
-                <stop offset="0%" stopColor="#fde8ea" />
-                <stop offset="100%" stopColor="#fdf2f4" />
-              </radialGradient>
-              <radialGradient id="glowHeart" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#fb7185" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#fb7185" stopOpacity="0" />
-              </radialGradient>
-            </defs>
-            {/* Background circle */}
-            <circle cx="110" cy="110" r="105" fill="url(#skyGrad)" />
-            {/* Glow behind heart */}
-            <ellipse cx="110" cy="115" rx="60" ry="55" fill="url(#glowHeart)" />
-            {/* Small floating hearts */}
-            <circle cx="60" cy="70" r="6" fill="#fda4af" opacity="0.5" />
-            <circle cx="50" cy="55" r="3.5" fill="#f43f5e" opacity="0.35" />
-            <circle cx="160" cy="65" r="5" fill="#fda4af" opacity="0.45" />
-            <circle cx="170" cy="80" r="3" fill="#f43f5e" opacity="0.3" />
-            {/* Central large heart */}
-            <path
-              d="M110 155 C110 155 55 120 55 85 C55 68 67 58 80 58 C92 58 102 65 110 74 C118 65 128 58 140 58 C153 58 165 68 165 85 C165 120 110 155 110 155Z"
-              fill="#f43f5e"
-              opacity="0.92"
-            />
-            {/* Heart shine */}
-            <path d="M82 72 Q90 64 100 68" stroke="white" strokeWidth="2.5" strokeLinecap="round" opacity="0.45" />
-            {/* Dove silhouette flying out */}
-            <path d="M108 78 Q115 68 128 72 Q120 74 118 80 Q126 76 132 80 Q124 85 118 82 Q116 90 108 90 Q102 85 108 78Z" fill="white" opacity="0.9" />
-            {/* Stars around */}
-            <path d="M75 45 L77 40 L79 45 L84 47 L79 49 L77 54 L75 49 L70 47Z" fill="#fbbf24" opacity="0.7" />
-            <path d="M145 42 L146.5 38 L148 42 L152 43.5 L148 45 L146.5 49 L145 45 L141 43.5Z" fill="#fbbf24" opacity="0.6" />
-            <path d="M50 110 L51 107 L52 110 L55 111 L52 112 L51 115 L50 112 L47 111Z" fill="#f9a8d4" opacity="0.7" />
-            <path d="M170 105 L171 102 L172 105 L175 106 L172 107 L171 110 L170 107 L167 106Z" fill="#f9a8d4" opacity="0.65" />
-            {/* Bottom text area - soft white arc */}
-            <ellipse cx="110" cy="175" rx="70" ry="18" fill="white" opacity="0.6" />
-            <text x="110" y="180" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#f43f5e" opacity="0.8" fontFamily="sans-serif">Ninna</text>
-          </svg>
-        </div>
+        <div className="mx-auto w-56 h-56 mb-8 flex items-center justify-center">
+          <svg viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-xl">
+            {/* Sky gradient background */}
+            <defs>
+              <radialGradient id="skyGrad" cx="50%" cy="40%" r="60%">
+                <stop offset="0%" stopColor="#fde8ea" />
+                <stop offset="100%" stopColor="#fdf2f4" />
+              </radialGradient>
+              <radialGradient id="glowHeart" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#fb7185" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#fb7185" stopOpacity="0" />
+              </radialGradient>
+            </defs>
+            {/* Background circle */}
+            <circle cx="110" cy="110" r="105" fill="url(#skyGrad)" />
+            {/* Glow behind heart */}
+            <ellipse cx="110" cy="115" rx="60" ry="55" fill="url(#glowHeart)" />
+            {/* Small floating hearts */}
+            <circle cx="60" cy="70" r="6" fill="#fda4af" opacity="0.5" />
+            <circle cx="50" cy="55" r="3.5" fill="#f43f5e" opacity="0.35" />
+            <circle cx="160" cy="65" r="5" fill="#fda4af" opacity="0.45" />
+            <circle cx="170" cy="80" r="3" fill="#f43f5e" opacity="0.3" />
+            {/* Central large heart */}
+            <path
+              d="M110 155 C110 155 55 120 55 85 C55 68 67 58 80 58 C92 58 102 65 110 74 C118 65 128 58 140 58 C153 58 165 68 165 85 C165 120 110 155 110 155Z"
+              fill="#f43f5e"
+              opacity="0.92"
+            />
+            {/* Heart shine */}
+            <path d="M82 72 Q90 64 100 68" stroke="white" strokeWidth="2.5" strokeLinecap="round" opacity="0.45" />
+            {/* Dove silhouette flying out */}
+            <path d="M108 78 Q115 68 128 72 Q120 74 118 80 Q126 76 132 80 Q124 85 118 82 Q116 90 108 90 Q102 85 108 78Z" fill="white" opacity="0.9" />
+            {/* Stars around */}
+            <path d="M75 45 L77 40 L79 45 L84 47 L79 49 L77 54 L75 49 L70 47Z" fill="#fbbf24" opacity="0.7" />
+            <path d="M145 42 L146.5 38 L148 42 L152 43.5 L148 45 L146.5 49 L145 45 L141 43.5Z" fill="#fbbf24" opacity="0.6" />
+            <path d="M50 110 L51 107 L52 110 L55 111 L52 112 L51 115 L50 112 L47 111Z" fill="#f9a8d4" opacity="0.7" />
+            <path d="M170 105 L171 102 L172 105 L175 106 L172 107 L171 110 L170 107 L167 106Z" fill="#f9a8d4" opacity="0.65" />
+            {/* Bottom text area - soft white arc */}
+            <ellipse cx="110" cy="175" rx="70" ry="18" fill="white" opacity="0.6" />
+            <text x="110" y="180" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#f43f5e" opacity="0.8" fontFamily="sans-serif">Ninna</text>
+          </svg>
+        </div>
 
         
 
