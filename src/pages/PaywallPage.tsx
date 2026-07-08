@@ -47,7 +47,7 @@ const PLANS = [
     tag: 'Uma vez, para sempre',
     originalPrice: 'R$497,00',
     price: 'R$147,00',
-    installments: '12x de R$12,25',
+    installments: '12x de R$15,19',
     pixPrice: 'R$139,65',
     perDay: 'menos de R$0,41/dia',
     period: 'pagamento único',
@@ -577,27 +577,8 @@ export default function PaywallPage({ answers }: Props) {
           </div>
         </div>
 
-        {/* PIX toggle */}
-        <div className="mx-4 mb-4">
-          <button
-            onClick={() => setShowPix(p => !p)}
-            className="w-full flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-4 py-3 transition-colors hover:bg-green-100 active:scale-[0.99]"
-          >
-            <div className="flex items-center gap-2">
-              <Zap size={15} className="text-green-600" />
-              <span className="text-green-700 font-bold text-sm">Pagar com PIX?</span>
-              <span className="bg-green-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full">5% OFF</span>
-            </div>
-            <span className="text-green-600 text-sm font-bold">{showPix ? chosen.pixPrice : 'Ver valor →'}</span>
-          </button>
-          {showPix && (
-            <div className="mt-2 bg-green-50 border border-green-100 rounded-xl p-3 text-center">
-              <p className="text-green-700 font-black text-xl">{chosen.pixPrice}</p>
-              <p className="text-green-600 text-xs mt-0.5">PIX à vista · aprovação imediata · acesso na hora</p>
-            </div>
-          )}
-        </div>
 
+        
         {/* Summary + Primary CTA */}
         <div className="px-4 mb-5">
           <div className="bg-white border border-rose-100 rounded-2xl p-4 mb-3 shadow-sm">
