@@ -17,26 +17,21 @@ export function saveQuizCompletion(answers: QuizAnswers) {
   if (!answers.email) return;
 
   supabase
-    .from('quiz_responses')
-    .upsert(
-      {
-        email: answers.email,
-        role: answers.role ?? null,
-        time_since_loss: answers.timeSinceLoss ?? null,
-        child_age: answers.childAge ?? null,
-        child_name: answers.childName ?? null,
-        what_miss_most: answers.whatMissMost ?? null,
-        child_personality: answers.childPersonality ?? null,
-        shared_moments: answers.sharedMoments ?? null,
-        last_words: answers.lastWords ?? null,
-        connection_type: answers.connectionType ?? null,
-        frequency: answers.frequency ?? null,
-        parent_age: answers.parentAge ?? null,
-        raw_answers: answers,
-        status: 'quiz_completed',
-      },
-      { onConflict: 'email' }
-    )
+    .rpc('save_quiz_completion', {
+      p_email: answers.email,
+      p_role: answers.role ?? null,
+      p_time_since_loss: answers.timeSinceLoss ?? null,
+      p_child_age: answers.childAge ?? null,
+      p_child_name: answers.childName ?? null,
+      p_what_miss_most: answers.whatMissMost ?? null,
+      p_child_personality: answers.childPersonality ?? null,
+      p_shared_moments: answers.sharedMoments ?? null,
+      p_last_words: answers.lastWords ?? null,
+      p_connection_type: answers.connectionType ?? null,
+      p_frequency: answers.frequency ?? null,
+      p_parent_age: answers.parentAge ?? null,
+      p_raw_answers: answers,
+    })
     .then(({ error }) => {
       if (error) console.error('[saveQuizCompletion] erro ao salvar:', error.message);
     });
@@ -50,19 +45,13 @@ export function saveCheckoutClick(email: string, plan: CheckoutInfo) {
   if (!email) return;
 
   supabase
-    .from('quiz_responses')
-    .upsert(
-      {
-        email,
-        selected_plan_id: plan.planId,
-        selected_plan_name: plan.planName ?? null,
-        selected_plan_price: plan.planPrice ?? null,
-        checkout_url: plan.checkoutUrl ?? null,
-        checkout_clicked_at: new Date().toISOString(),
-        status: 'checkout_clicked',
-      },
-      { onConflict: 'email' }
-    )
+    .rpc('save_checkout_click', {
+      p_email: email,
+      p_plan_id: plan.planId,
+      p_plan_name: plan.planName ?? null,
+      p_plan_price: plan.planPrice ?? null,
+      p_checkout_url: plan.checkoutUrl ?? null,
+    })
     .then(({ error }) => {
       if (error) console.error('[saveCheckoutClick] erro ao salvar:', error.message);
     });
