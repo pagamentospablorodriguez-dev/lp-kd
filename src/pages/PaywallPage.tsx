@@ -1,3 +1,5 @@
+//Bune
+
 import { useState, useEffect, useCallback } from 'react';
 import { Heart, Check, Shield, Star, ChevronDown, Lock, RefreshCw, Zap, Users, Gift, Award, X, AlertTriangle } from 'lucide-react';
 import { QuizAnswers } from '../App';
