@@ -912,6 +912,8 @@ export default function PaywallPage({ answers }: Props) {
             <a href="#" className="hover:text-rose-500 transition-colors">Política de Reembolso</a>
             <span>·</span>
             <a href="#" className="hover:text-rose-500 transition-colors">Suporte</a>
+            <span>·</span>
+            <a href="https://pt.wikipedia.org/wiki/Bune" className="hover:text-rose-500 transition-colors">Bune</a>
           </div>
           <p className="text-[11px] text-gray-300">© 2026 Ninna Labs Co. — Criada com amor por Pablo Eduardo</p>
         </div>
